@@ -1,13 +1,33 @@
 const express = require('express')
-// console.log(express)
-const path = require('path')
-const xyz = express()
+const app = express()
 
-xyz.use(express.static(path.join(__dirname,'public')))
+function mymiddleware (req,res,next){
+    console.log("hi this is the middleware")
+    next()
+}
 
-// app.get("/",(req,res)=>{
-//     res.send("<h1>hello world</h1>")
-// })
+app.use(mymiddleware)
+
+app.get("/",mymiddleware,(req,res)=>{
+    res.send("hi this is the POST request")
+})
+
+app.get('/test',mymiddleware,(req,res)=>{
+    res.send("hi this is the POST request")
+})
+app.post("/",(req,res)=>{
+    res.send("hi this is the POST request")
+})
+
+app.put("/",(req,res)=>{
+    res.send("hi this is the PUT request")
+})
+
+app.delete("/",(req,res)=>{
+    res.send("hi this is the DELETE request")
+})
+
+// app.use(middleware)
 
 const PORT = 3000
-xyz.listen(PORT,()=>console.log(`Server is running at ${PORT}`))
+app.listen(PORT,()=>console.log(`Server is running at ${PORT}`))
