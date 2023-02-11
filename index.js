@@ -1,31 +1,33 @@
+const { json } = require('express')
 const express = require('express')
 const app = express()
 
-function mymiddleware (req,res,next){
-    console.log("hi this is the middleware")
-    next()
-}
+const members = [{
+    id:1,
+    name: "John Doe",
+    email:"john@gmail.com",
+    status:"active"
+}, {
+    id:2,
+    name: "Jane Doe",
+    email:"john@gmail.com",
+    status:"Inactive"
+},{
+    id:3,
+    name: "stevekrzz",
+    email:"stev@gmail.com",
+    status:"active"
+}]
+    app.get("/showAllUser",(req,res)=>{
+        res.status(200).json(members)
+    })
+    app.get("/showUser/:uid",(req,res)=>{
+       const id =  req.params.uid
+       const user = members.filter(member=>member.id===parseInt(id))
+        user.length !==0 ? res.status(200).json(user) : res.status(200).json({msg: "User not found"})
+       res.status(200).json(user)
+    })
 
-app.use(mymiddleware)
-
-app.get("/",mymiddleware,(req,res)=>{
-    res.send("hi this is the POST request")
-})
-
-app.get('/test',mymiddleware,(req,res)=>{
-    res.send("hi this is the POST request")
-})
-app.post("/",(req,res)=>{
-    res.send("hi this is the POST request")
-})
-
-app.put("/",(req,res)=>{
-    res.send("hi this is the PUT request")
-})
-
-app.delete("/",(req,res)=>{
-    res.send("hi this is the DELETE request")
-})
 
 // app.use(middleware)
 
