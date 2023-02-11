@@ -1,5 +1,6 @@
 const { json } = require('express')
 const express = require('express')
+const uuid = require('uuid')
 const app = express()
 
 const members = [{
@@ -18,6 +19,8 @@ const members = [{
     email:"stev@gmail.com",
     status:"active"
 }]
+
+app.use(express.json())
     app.get("/showAllUser",(req,res)=>{
         res.status(200).json(members)
     })
@@ -26,6 +29,17 @@ const members = [{
        const user = members.filter(member=>member.id===parseInt(id))
         user.length !==0 ? res.status(200).json(user) : res.status(200).json({msg: "User not found"})
        res.status(200).json(user)
+    })
+    app.post("/addUser/",(req,res)=>{
+        const {name,email} = req.body
+        const newMember = {
+            id: uuid.v4(),
+            email,
+            name,
+            status: "inactive"
+        }
+        members.push(newMember)
+        res.status(200).json(members)
     })
 
 
