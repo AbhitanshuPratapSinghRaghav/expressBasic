@@ -30,7 +30,7 @@ app.use(express.json())
         user.length !==0 ? res.status(200).json(user) : res.status(200).json({msg: "User not found"})
        res.status(200).json(user)
     })
-    app.post("/addUser/",(req,res)=>{
+    app.post("/addUser/",(req,res)=>{ 
         const {name,email} = req.body
         const newMember = {
             id: uuid.v4(),
@@ -41,9 +41,16 @@ app.use(express.json())
         members.push(newMember)
         res.status(200).json(members)
     })
-
-
-// app.use(middleware)
-
+   app.delete("/deleteUser/:uid",(req,res)=>{
+    const id = parseInt(req.params.uid)
+    const found = members.some(members=>members.id===id)
+    if(found){
+        const results = members.filter(member=>member.id!==id)
+        res.status(200).json(results)
+    }else{
+        res.status(400).json({msg: `No member found with the id of ${id}`})
+    }
+   }) 
+    
 const PORT = 3000
 app.listen(PORT,()=>console.log(`Server is running at ${PORT}`))
